@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, math
 
 from Players.player import Player
 from Players.random import RandomAgent
@@ -63,8 +63,14 @@ class RPS:
 
     def get_scores (self):
         total = 1 if (self.p1.wins + self.p2.wins) <= 0 else self.p1.wins + self.p2.wins
-        p1_wr = int(self.p1.wins/total * 100)
-        p2_wr = int(self.p2.wins/total * 100)
+        p1_wr = (self.p1.wins/total * 100)
+        p2_wr = (self.p2.wins/total * 100)
+        if (p1_wr > p2_wr):
+            p1_wr = math.ceil(p1_wr)
+            p2_wr = math.floor(p2_wr)
+        else:
+            p1_wr = math.floor(p1_wr)
+            p2_wr = math.ceil(p2_wr)
         score_report = f"[{self.p1.name.upper()} : {str(self.p1.wins)}, {str(p1_wr)}% {self.p2.name.upper()} : {str(self.p2.wins)}, {str(p2_wr)}% ]"
         return score_report
 
@@ -82,9 +88,11 @@ if len(sys.argv) == 3:
     os.system('cls')
     game = RPS(sys.argv[1], sys.argv[2])
     game.play()
-    for i in range(999):
+    i = 0
+    while (i < 10000):
         os.system('cls')
         game.play()
+        i += 1
 
     print(f"FINAL SCORE: {game.get_scores()}")
 else:
